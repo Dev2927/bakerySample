@@ -7,7 +7,7 @@ import { BlogPosts } from "./BlogPosts";
 
 function App() {
   return (
-    <div className="min-h-screen m-0 p-0">
+    <div className="min-h-screen">
       <Navbar />
       <main>
         <Hero />
