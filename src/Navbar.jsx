@@ -12,9 +12,9 @@ export function Navbar() {
   const links = [
     { name: 'Home', path: '/' },
     { name: 'Menu', path: '#menu' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Blog', path: '#blog' },
+    { name: 'About', path: '#about' },
+    { name: 'Contact', path: '#contact' },
   ]
 
   const handleNavigation = () => setIsOpen(false)
