@@ -1,4 +1,4 @@
-import { motion, useInView, stagger, useAnimate } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import {
   Card,
   CardHeader,
@@ -9,7 +9,7 @@ import { Button } from "./components/ui/button";
 import croissant from "./assets/croissant.jpeg";
 import sourdough from "./assets/sourdough.jpeg";
 import cinnamon from "./assets/cinnamon.jpeg";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 
 const products = [
   {
@@ -17,139 +17,89 @@ const products = [
     price: "$3.99",
     description: "Buttery French classic",
     image: croissant,
+    icon: "🥐"
   },
   {
     name: "Sourdough",
     price: "$5.99",
     description: "Traditional artisan bread",
     image: sourdough,
+    icon: "🍞"
   },
   {
     name: "Cinnamon Roll",
     price: "$4.50",
     description: "Freshly baked with love",
     image: cinnamon,
+    icon: "🎉"
   },
 ];
 
 export const FeaturedProducts = React.memo(() => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [scope, animate] = useAnimate();
-
-  useEffect(() => {
-    if (isInView) {
-      animate(
-        ".product-card",
-        { opacity: 1, y: 0 },
-        { delay: stagger(0.2), duration: 0.8 }
-      );
-      animate(
-        ".price-tag",
-        { scale: [0.8, 1.2, 1], opacity: 1 },
-        { delay: stagger(0.3), duration: 0.6 }
-      );
-    }
-  }, [isInView]);
+  const isInView = useInView(ref, { once: true, margin: "0px" });
 
   return (
     <section
       ref={ref}
-      className="relative py-28 px-4 bg-amber-50/30 overflow-hidden"
+      className="relative py-24 px-4 bg-gradient-to-b from-amber-50 to-white"
       id="menu"
     >
-      {/* Decorative background elements */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={isInView ? { scale: 1 } : {}}
-        className="absolute -top-48 -right-48 w-96 h-96 bg-amber-100/20 rounded-full blur-3xl transform-gpu"
-      />
-
       <div className="container mx-auto">
         <motion.h2
-          initial={{ opacity: 0, y: -50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ type: "tween", bounce: 0.4 }}
-          className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-amber-600 to-amber-400 bg-clip-text text-transparent"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16 bg-gradient-to-r from-amber-700 to-amber-500 bg-clip-text text-transparent"
         >
           Our Fresh Bakes
         </motion.h2>
 
-        <div ref={scope} className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {products.map((product, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {products.map((product) => (
             <motion.div
               key={product.name}
-              initial={{ opacity: 0, y: 80 }}
-              className="product-card transform-gpu"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "0px" }}
+              transition={{ duration: 0.5 }}
+              className="transform-gpu"
             >
-              <Card className="group relative overflow-hidden border-0 bg-white/95 backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
-                {/* Hover overlay */}
-                <motion.div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity transform-gpu" />
-
+              <Card className="group relative overflow-hidden border border-amber-100 bg-white hover:shadow-lg transition-shadow">
                 <CardHeader className="relative overflow-hidden">
-                  <motion.img
+                  <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-72 object-cover transform group-hover:scale-105 transition-transform duration-500"
-                    initial={{ scale: 1.1 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true }}
+                    loading="lazy"
+                    className="w-full h-64 md:h-72 object-cover transform group-hover:scale-105 transition-transform"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  <div className="absolute top-4 right-4 bg-amber-100/90 backdrop-blur-sm px-3 py-2 rounded-full text-xl shadow-sm">
+                    {product.icon}
+                  </div>
                 </CardHeader>
 
-                <CardContent className="mt-6 space-y-3">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="transform-gpu"
-                  >
-                    <h3 className="text-2xl font-bold text-gray-900">
-                      {product.name}
-                    </h3>
-                  </motion.div>
-
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="text-gray-600 text-lg"
-                  >
+                <CardContent className="mt-5 space-y-2">
+                  <h3 className="text-xl font-bold text-gray-900">
+                    {product.name}
+                  </h3>
+                  <p className="text-gray-600">
                     {product.description}
-                  </motion.p>
+                  </p>
                 </CardContent>
 
-                <CardFooter className="flex justify-between items-center pb-6">
-                  <motion.span className="price-tag opacity-0 text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-400 bg-clip-text text-transparent">
+                <CardFooter className="flex justify-between items-center pb-4">
+                  <span className="text-xl font-bold text-amber-700">
                     {product.price}
-                  </motion.span>
-
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="transform-gpu"
+                  </span>
+                  <Button
+                    variant="outline"
+                    className="border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white py-4 px-6"
                   >
-                    <Button
-                      variant="outline"
-                      className="border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white text-lg py-5 px-8"
-                    >
-                      Add to Cart
-                    </Button>
-                  </motion.div>
+                    Add to Cart
+                  </Button>
                 </CardFooter>
-
-                {/* Floating decoration */}
-                <motion.div
-                  className="absolute -top-4 -right-4 text-3xl transform-gpu"
-                  initial={{ scale: 0, rotate: -45 }}
-                  animate={isInView ? { scale: 1, rotate: 0 } : {}}
-                  transition={{ type: "tween", delay: index * 0.3 }}
-                >
-                  {index === 0 && "🥐"}
-                  {index === 1 && "🍞"}
-                  {index === 2 && "🎉"}
-                </motion.div>
               </Card>
             </motion.div>
           ))}
@@ -157,4 +107,4 @@ export const FeaturedProducts = React.memo(() => {
       </div>
     </section>
   );
-});
+})

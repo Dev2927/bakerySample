@@ -1,6 +1,6 @@
-import { motion, useInView, stagger, useAnimate } from 'framer-motion'
-import { Card, CardContent, CardHeader } from './components/ui/card'
-import React, { useEffect, useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { Card, CardContent } from './components/ui/card'
+import React, { useRef } from 'react'
 import customer1 from './assets/customer1.jpeg'
 import customer3 from './assets/customer3.jpeg'
 import customer2 from './assets/customer2.jpeg'
@@ -28,116 +28,64 @@ const testimonials = [
 
 export const Testimonials = React.memo(() => {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [scope, animate] = useAnimate()
-
-  useEffect(() => {
-    if (isInView) {
-      animate(".testimonial-card", 
-        { opacity: 1, y: 0 },
-        { delay: stagger(0.2), duration: 0.8 }
-      )
-      animate(".customer-image",
-        { rotate: [20, -10, 0], scale: [0.8, 1.2, 1] },
-        { delay: stagger(0.3), duration: 0.6 }
-      )
-    }
-  }, [isInView])
+  const isInView = useInView(ref, { once: true, margin: "0px" })
 
   return (
     <section 
       ref={ref}
-      className="relative py-28 px-4 bg-gradient-to-b from-amber-50/80 to-white overflow-hidden" 
+      className="relative py-24 px-4 bg-gradient-to-b from-amber-50 to-white" 
       id="testimonials"
     >
-      {/* Decorative background elements */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={isInView ? { scale: 1 } : {}}
-        className="absolute -top-48 left-1/3 w-96 h-96 bg-amber-100/20 rounded-full blur-3xl"
-      />
-
       <div className="container mx-auto">
         <motion.h2
-          initial={{ opacity: 0, y: -50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ type: "tween", bounce: 0.4 }}
-          className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-amber-600 to-amber-400 bg-clip-text text-transparent"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-amber-700 to-amber-500 bg-clip-text text-transparent"
         >
           What Our Customers Say
         </motion.h2>
 
-        <div 
-          ref={scope}
-          className="grid grid-cols-1 md:grid-cols-3 gap-12"
-        >
-          {testimonials.map((testimonial, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {testimonials.map((testimonial) => (
             <motion.div
               key={testimonial.name}
-              className="testimonial-card opacity-0 transform-gpu"
-              initial={{ y: 80 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
             >
-              <Card className="group relative overflow-hidden border-0 bg-white/95 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full">
-                {/* Hover effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-amber-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity transform-gpu"
-                />
-
-                <CardContent className="p-8 relative">
-                  {/* Quote icon */}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={isInView ? { scale: 1 } : {}}
-                    className="absolute -top-6 -right-6 text-6xl text-amber-100/80 z-0 transform-gpu"
-                  >
+              <Card className="group relative overflow-hidden border border-amber-100 bg-white hover:shadow-lg transition-shadow h-full">
+                <CardContent className="p-6">
+                  <div className="absolute top-4 right-4 text-4xl text-amber-200">
                     ”
-                  </motion.div>
+                  </div>
 
-                  <motion.p 
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ delay: 0.4 }}
-                    className="text-lg text-gray-700 italic mb-6 relative z-10"
-                  >
+                  <p className="text-gray-700 text-lg mb-6 relative z-10 min-h-[120px]">
                     "{testimonial.text}"
-                  </motion.p>
+                  </p>
 
-                  <motion.div 
-                    className="flex items-center gap-6 transform-gpu"
-                    initial={{ x: -20 }}
-                    animate={isInView ? { x: 0 } : {}}
-                    transition={{ delay: 0.6 }}
-                  >
-                    <motion.div
-                      className="relative customer-image transform-gpu"
-                      whileHover={{ scale: 1.1 }}
-                    >
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
                       <img 
                         src={testimonial.image} 
                         alt={testimonial.name}
-                        className="w-16 h-16 rounded-full object-cover border-4 border-amber-100 shadow-lg"
+                        loading="lazy"
+                        className="w-14 h-14 rounded-full object-cover border-2 border-amber-100 shadow-sm"
                       />
-                      <div className="absolute inset-0 rounded-full border-2 border-amber-200/50 animate-ping-once" />
-                    </motion.div>
+                    </div>
                     
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-900">
+                      <h3 className="text-lg font-semibold text-gray-900">
                         {testimonial.name}
                       </h3>
-                      <p className="text-sm text-amber-600 font-medium">
+                      <p className="text-sm text-amber-700 font-medium">
                         {testimonial.role}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 </CardContent>
-
-                {/* Decorative corner */}
-                <motion.div
-                  className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-amber-100 transform-gpu"
-                  initial={{ opacity: 0 }}
-                  animate={isInView ? { opacity: 1 } : {}}
-                  transition={{ delay: 0.8 }}
-                />
               </Card>
             </motion.div>
           ))}

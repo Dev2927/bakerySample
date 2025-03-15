@@ -1,8 +1,8 @@
-import { motion, useInView, stagger, useAnimate } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { Button } from './components/ui/button'
 import { Card, CardHeader, CardContent, CardFooter } from './components/ui/card'
 import { Link } from 'react-router-dom'
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import blog1 from './assets/blog1.jpeg'
 import blog2 from './assets/blog2.jpeg'
 import blog3 from './assets/blog3.jpeg'
@@ -33,165 +33,87 @@ const posts = [
 
 export const BlogPosts = React.memo(() => {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [scope, animate] = useAnimate()
-
-  useEffect(() => {
-    if (isInView) {
-      const blogCards = scope.current.querySelectorAll('.blog-card');
-      const blogImages = scope.current.querySelectorAll('.blog-image');
-  
-      if (blogCards.length > 0) {
-        animate(blogCards, 
-          { opacity: 1, y: 0 },
-          { delay: stagger(0.2), duration: 0.8 }
-        );
-      }
-  
-      if (blogImages.length > 0) {
-        animate(blogImages,
-          { scale: [0.9, 1.05, 1] },
-          { delay: stagger(0.3), duration: 0.6 }
-        );
-      }
-    }
-  }, [isInView]);
+  const isInView = useInView(ref, { once: true, margin: "0px" })
 
   return (
     <section 
       ref={ref}
-      className="relative py-28 px-4 bg-gradient-to-b from-amber-50/80 to-white overflow-hidden" 
+      className="relative py-24 px-4 bg-gradient-to-b from-amber-50 to-white" 
       id="blog"
     >
-      {/* Decorative background elements */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={isInView ? { scale: 1 } : {}}
-        className="absolute -top-48 right-1/3 w-96 h-96 bg-amber-100/20 rounded-full blur-3xl transform-gpu"
-      />
-
       <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-16">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
           <motion.h2
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-amber-400 bg-clip-text text-transparent"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-700 to-amber-500 bg-clip-text text-transparent text-center md:text-left"
           >
             Latest from Our Blog
           </motion.h2>
           
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="transform-gpu"
+          <Button 
+            variant="outline" 
+            className="border-amber-600 text-amber-600 hover:bg-amber-50 text-base md:text-lg py-4 px-6 shadow-sm transition-transform hover:scale-[1.02]"
+            asChild
           >
-            <Button 
-              variant="outline" 
-              className="border-amber-600 text-amber-600 hover:bg-amber-50 text-lg py-5 px-8 shadow-sm hover:shadow-amber-200/50"
-              asChild
-            >
-              <Link to="/blog">
-                View All Posts
-              </Link>
-            </Button>
-          </motion.div>
+            <Link to="/blog">
+              View All Posts
+            </Link>
+          </Button>
         </div>
 
-        <div 
-          ref={scope}
-          className="grid grid-cols-1 md:grid-cols-3 gap-12"
-        >
-          {posts.map((post, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {posts.map((post) => (
             <motion.div
               key={post.title}
-              className="blog-card opacity-0 transform-gpu"
-              initial={{ y: 80 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
             >
-              <Card className="group relative overflow-hidden border-0 bg-white/95 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full">
-                {/* Hover overlay */}
-                <motion.div
-                  className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity transform-gpu"
-                />
-
+              <Card className="group relative overflow-hidden border border-amber-100 bg-white hover:shadow-lg transition-shadow h-full">
                 <CardHeader className="relative overflow-hidden">
-                  <motion.div
-                    initial={{ scale: 1.1 }}
-                    whileInView={{ scale: 1 }}
-                    className="relative overflow-hidden transform-gpu"
-                  >
+                  <div className="relative overflow-hidden">
                     <img 
                       src={post.image} 
                       alt={post.title}
-                      className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-                  </motion.div>
-                  
-                  {/* Date floating badge */}
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={isInView ? { y: 0, opacity: 1 } : {}}
-                    transition={{ delay: 0.4 }}
-                    className="absolute top-4 left-4 bg-white/90 px-4 py-2 rounded-full text-sm shadow-sm transform-gpu"
-                  >
-                    {post.date}
-                  </motion.div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                    <div className="absolute top-4 left-4 bg-white/90 px-3 py-1.5 rounded-full text-sm shadow-sm">
+                      {post.date}
+                    </div>
+                  </div>
                 </CardHeader>
 
-                <CardContent className="p-8 space-y-4">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.4 }}
-                    className="flex justify-between items-center text-sm text-gray-500 transform-gpu"
-                  >
+                <CardContent className="p-6 space-y-4">
+                  <div className="flex justify-between items-center text-sm text-amber-700">
                     <span>{post.readTime}</span>
                     <div className="w-8 h-px bg-amber-200" />
-                  </motion.div>
+                  </div>
 
-                  <motion.h3
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.5 }}
-                    className="text-2xl font-bold text-gray-900"
-                  >
+                  <h3 className="text-xl font-bold text-gray-900">
                     {post.title}
-                  </motion.h3>
+                  </h3>
 
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ delay: 0.6 }}
-                    className="text-gray-600 text-lg"
-                  >
+                  <p className="text-gray-600">
                     {post.excerpt}
-                  </motion.p>
+                  </p>
                 </CardContent>
 
-                <CardFooter className="p-8 pt-0">
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    className="inline-block transform-gpu"
+                <CardFooter className="p-6 pt-0">
+                  <Button 
+                    variant="link" 
+                    className="text-amber-600 p-0 group hover:no-underline"
                   >
-                    <Button 
-                      variant="link" 
-                      className="text-amber-600 p-0 text-lg group"
-                    >
-                      Read More
-                      <span className="ml-2 group-hover:ml-3 transition-all">
-                        →
-                      </span>
-                    </Button>
-                  </motion.div>
+                    Read More
+                    <span className="ml-2 transition-all group-hover:ml-3">
+                      →
+                    </span>
+                  </Button>
                 </CardFooter>
-
-                {/* Decorative corner */}
-                <motion.div
-                  className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-amber-100 transform-gpu"
-                  initial={{ opacity: 0 }}
-                  animate={isInView ? { opacity: 1 } : {}}
-                  transition={{ delay: 0.8 }}
-                />
               </Card>
             </motion.div>
           ))}
