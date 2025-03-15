@@ -2,7 +2,7 @@ import { motion, useInView, stagger, useAnimate } from 'framer-motion'
 import { Button } from './components/ui/button'
 import { Card, CardHeader, CardContent, CardFooter } from './components/ui/card'
 import { Link } from 'react-router-dom'
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import blog1 from './assets/blog1.jpeg'
 import blog2 from './assets/blog2.jpeg'
 import blog3 from './assets/blog3.jpeg'
@@ -31,7 +31,7 @@ const posts = [
   },
 ]
 
-export function BlogPosts() {
+export const BlogPosts = React.memo(() => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [scope, animate] = useAnimate()
@@ -67,7 +67,7 @@ export function BlogPosts() {
       <motion.div
         initial={{ scale: 0 }}
         animate={isInView ? { scale: 1 } : {}}
-        className="absolute -top-48 right-1/3 w-96 h-96 bg-amber-100/20 rounded-full blur-3xl"
+        className="absolute -top-48 right-1/3 w-96 h-96 bg-amber-100/20 rounded-full blur-3xl transform-gpu"
       />
 
       <div className="container mx-auto">
@@ -83,6 +83,7 @@ export function BlogPosts() {
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            className="transform-gpu"
           >
             <Button 
               variant="outline" 
@@ -103,20 +104,20 @@ export function BlogPosts() {
           {posts.map((post, index) => (
             <motion.div
               key={post.title}
-              className="blog-card opacity-0"
+              className="blog-card opacity-0 transform-gpu"
               initial={{ y: 80 }}
             >
               <Card className="group relative overflow-hidden border-0 bg-white/95 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full">
                 {/* Hover overlay */}
                 <motion.div
-                  className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity transform-gpu"
                 />
 
                 <CardHeader className="relative overflow-hidden">
                   <motion.div
                     initial={{ scale: 1.1 }}
                     whileInView={{ scale: 1 }}
-                    className="relative overflow-hidden"
+                    className="relative overflow-hidden transform-gpu"
                   >
                     <img 
                       src={post.image} 
@@ -131,7 +132,7 @@ export function BlogPosts() {
                     initial={{ y: 20, opacity: 0 }}
                     animate={isInView ? { y: 0, opacity: 1 } : {}}
                     transition={{ delay: 0.4 }}
-                    className="absolute top-4 left-4 bg-white/90 px-4 py-2 rounded-full text-sm shadow-sm"
+                    className="absolute top-4 left-4 bg-white/90 px-4 py-2 rounded-full text-sm shadow-sm transform-gpu"
                   >
                     {post.date}
                   </motion.div>
@@ -142,7 +143,7 @@ export function BlogPosts() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
                     transition={{ delay: 0.4 }}
-                    className="flex justify-between items-center text-sm text-gray-500"
+                    className="flex justify-between items-center text-sm text-gray-500 transform-gpu"
                   >
                     <span>{post.readTime}</span>
                     <div className="w-8 h-px bg-amber-200" />
@@ -170,7 +171,7 @@ export function BlogPosts() {
                 <CardFooter className="p-8 pt-0">
                   <motion.div
                     whileHover={{ x: 5 }}
-                    className="inline-block"
+                    className="inline-block transform-gpu"
                   >
                     <Button 
                       variant="link" 
@@ -186,7 +187,7 @@ export function BlogPosts() {
 
                 {/* Decorative corner */}
                 <motion.div
-                  className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-amber-100"
+                  className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-amber-100 transform-gpu"
                   initial={{ opacity: 0 }}
                   animate={isInView ? { opacity: 1 } : {}}
                   transition={{ delay: 0.8 }}
@@ -198,4 +199,4 @@ export function BlogPosts() {
       </div>
     </section>
   )
-} 
+})

@@ -1,9 +1,9 @@
 import { motion, useInView } from "framer-motion";
 import { Button } from "./components/ui/button";
 import heroImage from './assets/heroImage.jpeg';
-import { useRef } from "react";
+import React, { useRef } from "react";
 
-export function Hero() {
+export const Hero = React.memo(() => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -144,4 +144,4 @@ export function Hero() {
       </div>
     </section>
   );
-}
+})

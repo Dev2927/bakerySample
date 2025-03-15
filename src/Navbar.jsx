@@ -2,9 +2,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence, stagger, useAnimate } from 'framer-motion'
 import { Button } from './components/ui/button'
 import { Menu, X } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
-export function Navbar() {
+export const Navbar = React.memo(() => {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
   const [scope, animate] = useAnimate()
@@ -35,7 +35,7 @@ export function Navbar() {
     <motion.nav 
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 120 }}
+      transition={{ type: 'tween', stiffness: 120 }}
       className="fixed w-full bg-white/90 backdrop-blur-md z-50 border-b border-amber-50 shadow-lg"
     >
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -71,7 +71,7 @@ export function Navbar() {
                       <motion.span 
                         layoutId="activeLink"
                         className="absolute left-0 bottom-0 w-full h-0.5 bg-amber-500"
-                        transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                        transition={{ type: 'tween', bounce: 0.2, duration: 0.3 }}
                       />
                     )}
                   </Link>
@@ -118,7 +118,7 @@ export function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ type: 'spring', stiffness: 300 }}
+            transition={{ type: 'tween', stiffness: 300 }}
             className="md:hidden bg-white/95 backdrop-blur-lg border-b"
             ref={scope}
           >
@@ -155,4 +155,4 @@ export function Navbar() {
       </AnimatePresence>
     </motion.nav>
   )
-}
+})

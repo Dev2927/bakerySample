@@ -1,6 +1,6 @@
 import { motion, useInView, stagger, useAnimate } from 'framer-motion'
 import { Card, CardContent, CardHeader } from './components/ui/card'
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import customer1 from './assets/customer1.jpeg'
 import customer3 from './assets/customer3.jpeg'
 import customer2 from './assets/customer2.jpeg'
@@ -26,7 +26,7 @@ const testimonials = [
   },
 ]
 
-export function Testimonials() {
+export const Testimonials = React.memo(() => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [scope, animate] = useAnimate()
@@ -61,7 +61,7 @@ export function Testimonials() {
         <motion.h2
           initial={{ opacity: 0, y: -50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ type: "spring", bounce: 0.4 }}
+          transition={{ type: "tween", bounce: 0.4 }}
           className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-amber-600 to-amber-400 bg-clip-text text-transparent"
         >
           What Our Customers Say
@@ -74,13 +74,13 @@ export function Testimonials() {
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.name}
-              className="testimonial-card opacity-0"
+              className="testimonial-card opacity-0 transform-gpu"
               initial={{ y: 80 }}
             >
               <Card className="group relative overflow-hidden border-0 bg-white/95 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full">
                 {/* Hover effect */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-amber-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute inset-0 bg-gradient-to-br from-amber-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity transform-gpu"
                 />
 
                 <CardContent className="p-8 relative">
@@ -88,7 +88,7 @@ export function Testimonials() {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={isInView ? { scale: 1 } : {}}
-                    className="absolute -top-6 -right-6 text-6xl text-amber-100/80 z-0"
+                    className="absolute -top-6 -right-6 text-6xl text-amber-100/80 z-0 transform-gpu"
                   >
                     ”
                   </motion.div>
@@ -103,13 +103,13 @@ export function Testimonials() {
                   </motion.p>
 
                   <motion.div 
-                    className="flex items-center gap-6"
+                    className="flex items-center gap-6 transform-gpu"
                     initial={{ x: -20 }}
                     animate={isInView ? { x: 0 } : {}}
                     transition={{ delay: 0.6 }}
                   >
                     <motion.div
-                      className="relative customer-image"
+                      className="relative customer-image transform-gpu"
                       whileHover={{ scale: 1.1 }}
                     >
                       <img 
@@ -133,7 +133,7 @@ export function Testimonials() {
 
                 {/* Decorative corner */}
                 <motion.div
-                  className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-amber-100"
+                  className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-amber-100 transform-gpu"
                   initial={{ opacity: 0 }}
                   animate={isInView ? { opacity: 1 } : {}}
                   transition={{ delay: 0.8 }}
@@ -145,4 +145,4 @@ export function Testimonials() {
       </div>
     </section>
   )
-}
+})

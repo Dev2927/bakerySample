@@ -14,5 +14,6 @@ module.exports = {
         'ping-once': 'ping 1s cubic-bezier(0, 0, 0.2, 1) 1'
       }
     }
-  }
+  },
+  purge: ["./src/**/*.{js,jsx,ts,tsx}"]
 };
